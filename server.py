@@ -136,5 +136,61 @@ def get_todo_details(todo_id: int) -> dict:
     except httpx.RequestError:
         raise ToolError("Could not connect to the external API.")
 
+@mcp.resource("support://policies/refunds")
+def get_refund_policy() -> str:
+    """Company refund policy."""
+
+    return """
+    Refund Policy
+
+    1. Customers can request a refund within 30 days.
+    2. Products must be unused.
+    3. Refund processing takes 5-7 business days.
+    4. Shipping costs are non-refundable.
+    """
+
+
+customers = {
+    "1": {
+        "name": "John",
+        "email": "john@example.com"
+    },
+    "2": {
+        "name": "Mary",
+        "email": "mary@example.com"
+    }
+}
+
+@mcp.resource("support://customers/{customer_id}")
+def get_customer_resource(customer_id: str) -> dict:
+    """Get customer information."""
+
+    customer = customers.get(customer_id)
+
+    if customer is None:
+        raise ToolError("Customer not found.")
+
+    return customer
+
+@mcp.resource("support://orders/{order_id}")
+def get_order_status(order_id: str) -> dict:
+    """Get order information."""
+
+    orders = {
+        "123": {"customer_id": 1, "status": "Shipped"},
+        "456": {"customer_id": 1, "status": "Processing"},
+        "789": {"customer_id": 2, "status": "Delivered"}
+    }
+
+    order = orders.get(order_id)
+
+    if order is None:
+        raise ToolError("Order not found.")
+
+    return {
+       "order_id": order_id,
+        **order
+    }
+
 if __name__ == "__main__":
     mcp.run()
