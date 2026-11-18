@@ -192,5 +192,59 @@ def get_order_status(order_id: str) -> dict:
         **order
     }
 
+
+@mcp.prompt()
+def draft_support_reply(
+    customer_name: str,
+    issue: str
+) -> str:
+    """Generate instructions for drafting a customer support response."""
+
+    return f"""
+    You are a professional customer support assistant.
+
+    Customer name: {customer_name}
+
+    Customer issue:
+    {issue}
+
+    Instructions:
+    1. Understand the customer's problem.
+    2. Be empathetic and professional.
+    3. Suggest an appropriate solution.
+    4. Do not invent information.
+    5. If information is missing, ask for clarification.
+
+    Write a helpful response to the customer.
+    """
+
+
+@mcp.prompt()
+def analyze_customer_complaint(
+    customer_name: str,
+    complaint_text: str,
+    order_id: str | None = None
+) -> str:
+    """Analyze a customer complaint and provide insights."""
+
+    return f"""
+    You are a customer support analyst.
+
+    Customer name: {customer_name}
+    Complaint: {complaint_text}
+    Order ID: {order_id or 'Not provided'}
+
+    Instructions:
+    1. Identify the main issue.
+    2. Identify missing information.
+    3. Determine whether there is enough evidence to assess the complaint.
+    4. Suggest possible resolutions or next steps.
+    5. Never invent information.
+    6. Be concise and professional.
+
+    Provide an analysis of the complaint.
+    """
+
+
 if __name__ == "__main__":
     mcp.run()
