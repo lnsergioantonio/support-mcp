@@ -73,7 +73,15 @@ def search_orders(
     status: str | None = None,
     limit: int = 10
 ) -> dict:
-    """Search orders by customer ID, optionally filtering by status."""
+    """
+    Search orders belonging to a customer.
+
+    Args:
+        customer_id: Customer ID.
+        status: Optional status filter.
+        limit: Maximum number of results. Must be between 1 and 50.
+               Defaults to 10.
+    """
 
     if customer_id <= 0:
         raise ToolError("Customer ID must be a positive integer.")
